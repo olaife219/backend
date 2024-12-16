@@ -93,9 +93,7 @@ app.put('/api/fileUpload', upload, (req, res) => {
 
 
 app.get('/', (req, res) => {
-    console.log(req.session);
-    console.log(req.session.id);
-    res.json(req.session.user);
+   res.send("Hello World");
 })
 
 const isAuthenticated = (req, res, next) => {
