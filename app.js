@@ -4,9 +4,6 @@ const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 const nodemailer = require('nodemailer');
 const session = require('express-session');
-const multer = require('multer');
-const cloudinary = require('cloudinary').v2
-const { CloudinaryStorage } = require('multer-storage-cloudinary')
 const path = require('path');
 const MySQLStore = require('express-mysql-session')(session);
 require('dotenv').config();
@@ -21,27 +18,6 @@ app.use(
 );
 app.use(express.json());
 app.use(express.urlencoded({extended: true }));
-
-cloudinary.config({
-    cloud_name: 'dyen2qt0p',
-    api_key: '137535476674486',
-    api_secret: 'yWGLHFTTk1MNWh1S0vc7tDR6n6A',
-})
-
-
-
-const storage = new CloudinaryStorage({
-    cloudinary: cloudinary,
-    params: {
-        folder: 'uploads/profile-picture/',
-        allowed_formats: ['jpg', 'png', 'jpeg'],
-        public_id: (req, file) => {
-            return 'custom-name-' + Date.now();
-        },
-    },
-});
-
-const upload = multer({ storage, limits: { fileSize: 5 * 1024 * 1024 }, }).single('image');
 
 
 const db = mysql.createConnection({
@@ -68,28 +44,6 @@ app.use(session({
     cookie: { secure: false }
 }));
 
-app.put('/api/fileUpload', upload, (req, res) => {
-
-    console.log(req.file)
-
-    const userId = req.session.user.id;
-    const imageUrl = req.file.path;
-
-    if (!imageUrl) {
-        return res.status(400).json({ message: 'No file uploaded' });
-    }
-
-    const query = 'UPDATE users SET image = ? WHERE id = ?';
-    db.query(query, [imageUrl, userId], (err, result) => {
-        if (err) {
-            console.error('Error updating profile image:', err);
-            return res.status(500).json({ message: 'Error updating profile image' });
-        } else {
-            req.session.user.image = imageUrl;
-            res.status(200).json({ message: 'Proile image Updated Successfuly' });
-        }
-    });
-});
 
 
 app.get('/', (req, res) => {
