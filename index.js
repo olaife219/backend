@@ -3,18 +3,17 @@ const express = require('express');
 // const MySQLStore = require('express-mysql-session')(session);
 // const db = require('./db')
 // const route = require('./router');
-// require('dotenv').config();
-// const cors = require("cors");
+const cors = require("cors");
 
 const app = express();
 
 // app.use(route);
-// app.use(
-//     cors({
-//       origin: 'http://localhost:3000',
-//       credentials: true,
-//     })
-//   );
+app.use(
+    cors({
+      origin: 'https://aiforeducator.ng',
+      credentials: true,
+    })
+  );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
