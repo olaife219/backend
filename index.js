@@ -31,8 +31,6 @@ app.use(express.urlencoded({ extended: true }));
 
 
   app.get('/', (req, res) => {
-    console.log(req.session);
-    console.log(req.session.id);
     res.send("Hello, wellcome to backend");    
   })
 
